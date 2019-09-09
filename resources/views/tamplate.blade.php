@@ -79,10 +79,20 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{('asset/jpg/avatar04.png')}}" class="img-circle elevation-2" alt="User Image">
+          @if(isset($user_avatar))
+            <img src="{{ $user_avatar }}" class="img-circle elevation-2" alt="User Image">
+          @else
+            <img src="{{('asset/jpg/avatar04.png')}}" class="img-circle elevation-2" alt="User Image">
+          @endif
         </div>
         <div class="info">
-          <a href="{{url('/infoprofile')}}" class="d-block">Ketut Marcuet</a>
+        @if(isset($userName))
+          <a href="{{url('/infoprofile')}}" class="d-block">{{ $userName }}</a>
+          <p class="dropdown-item-text text-muted mb-0">{{ $userEmail }}</p>
+        @else
+          <a href="{{url('/infoprofile')}}" class="d-block">Username Gak masuk</a>
+          <p class="dropdown-item-text text-muted mb-0">Email gak masuk</p>
+        @endif
         </div>
       </div>
 
@@ -113,7 +123,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="/signout" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Sign Out</p>
                 </a>
@@ -356,7 +366,14 @@
     </div>
     <!-- /.sidebar -->
   </aside>
-
+  @if(session('error'))
+  <div class="alert alert-danger" role="alert">
+    <p class="mb-3">{{ session('error') }}</p>
+    @if(session('errorDetail'))
+      <pre class="alert-pre border bg-light p-2"><code>{{ session('errorDetail') }}</code></pre>
+    @endif
+  </div>
+@endif
 @section('content')
 @show
 @include('layout.footer')
